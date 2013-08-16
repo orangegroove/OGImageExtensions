@@ -19,6 +19,8 @@
 		09EA48CC17BE4AE50026664E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09EA48B417BE4AE40026664E /* UIKit.framework */; };
 		09EA48D417BE4AE50026664E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 09EA48D217BE4AE50026664E /* InfoPlist.strings */; };
 		09EA48D617BE4AE50026664E /* OGImageExtensionsProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 09EA48D517BE4AE50026664E /* OGImageExtensionsProjectTests.m */; };
+		09EA48E717BE4BCB0026664E /* UIImage+OGImageExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 09EA48E317BE4BCB0026664E /* UIImage+OGImageExtensions.m */; };
+		09EA48EB17BE4E620026664E /* OGImageExtensionsCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 09EA48EA17BE4E620026664E /* OGImageExtensionsCache.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,13 @@
 		09EA48D117BE4AE50026664E /* OGImageExtensionsProjectTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OGImageExtensionsProjectTests-Info.plist"; sourceTree = "<group>"; };
 		09EA48D317BE4AE50026664E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		09EA48D517BE4AE50026664E /* OGImageExtensionsProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OGImageExtensionsProjectTests.m; sourceTree = "<group>"; };
+		09EA48DF17BE4BCB0026664E /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		09EA48E217BE4BCB0026664E /* UIImage+OGImageExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OGImageExtensions.h"; sourceTree = "<group>"; };
+		09EA48E317BE4BCB0026664E /* UIImage+OGImageExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+OGImageExtensions.m"; sourceTree = "<group>"; };
+		09EA48E417BE4BCB0026664E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		09EA48E917BE4E620026664E /* OGImageExtensionsCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGImageExtensionsCache.h; sourceTree = "<group>"; };
+		09EA48EA17BE4E620026664E /* OGImageExtensionsCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OGImageExtensionsCache.m; sourceTree = "<group>"; };
+		09EA48EC17BE50EB0026664E /* OGImageExtensions.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = OGImageExtensions.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +86,10 @@
 		09EA48A417BE4AE40026664E = {
 			isa = PBXGroup;
 			children = (
+				09EA48EC17BE50EB0026664E /* OGImageExtensions.podspec */,
+				09EA48DF17BE4BCB0026664E /* LICENSE */,
+				09EA48E417BE4BCB0026664E /* README.md */,
+				09EA48E117BE4BCB0026664E /* OGImageExtensions */,
 				09EA48B617BE4AE40026664E /* OGImageExtensionsProject */,
 				09EA48CF17BE4AE50026664E /* OGImageExtensionsProjectTests */,
 				09EA48AF17BE4AE40026664E /* Frameworks */,
@@ -107,10 +120,10 @@
 		09EA48B617BE4AE40026664E /* OGImageExtensionsProject */ = {
 			isa = PBXGroup;
 			children = (
+				09EA48B717BE4AE40026664E /* Supporting Files */,
 				09EA48BF17BE4AE40026664E /* OGAppDelegate.h */,
 				09EA48C017BE4AE40026664E /* OGAppDelegate.m */,
 				09EA48C217BE4AE40026664E /* Images.xcassets */,
-				09EA48B717BE4AE40026664E /* Supporting Files */,
 			);
 			path = OGImageExtensionsProject;
 			sourceTree = "<group>";
@@ -142,6 +155,17 @@
 				09EA48D217BE4AE50026664E /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		09EA48E117BE4BCB0026664E /* OGImageExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				09EA48E917BE4E620026664E /* OGImageExtensionsCache.h */,
+				09EA48EA17BE4E620026664E /* OGImageExtensionsCache.m */,
+				09EA48E217BE4BCB0026664E /* UIImage+OGImageExtensions.h */,
+				09EA48E317BE4BCB0026664E /* UIImage+OGImageExtensions.m */,
+			);
+			path = OGImageExtensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,6 +264,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09EA48EB17BE4E620026664E /* OGImageExtensionsCache.m in Sources */,
+				09EA48E717BE4BCB0026664E /* UIImage+OGImageExtensions.m in Sources */,
 				09EA48C117BE4AE40026664E /* OGAppDelegate.m in Sources */,
 				09EA48BD17BE4AE40026664E /* main.m in Sources */,
 			);
@@ -436,6 +462,7 @@
 				09EA48DB17BE4AE50026664E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		09EA48DC17BE4AE50026664E /* Build configuration list for PBXNativeTarget "OGImageExtensionsProjectTests" */ = {
 			isa = XCConfigurationList;
@@ -444,6 +471,7 @@
 				09EA48DE17BE4AE50026664E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
