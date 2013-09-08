@@ -170,17 +170,19 @@
 
 - (UIImage *)imageScaledToSize:(CGSize)size
 {
+	CGFloat scale				= self.scale;
 	CGAffineTransform transform	= [self transformForSize:size];
 	CGRect rect					= CGRectIntegral(self.transpose ? (CGRect){0.f, 0.f, size.height, size.width} : (CGRect){0.f, 0.f, size});
 	CGImageRef imageRef			= [self imageWithAlpha].CGImage;
-	CGContextRef ctx			= CGBitmapContextCreate(NULL, size.width, size.height, CGImageGetBitsPerComponent(imageRef), 0, CGImageGetColorSpace(imageRef), CGImageGetBitmapInfo(imageRef));
+	CGContextRef ctx			= CGBitmapContextCreate(NULL, (size_t)(size.width * scale), (size_t)(size.height * scale), CGImageGetBitsPerComponent(imageRef), 0, CGImageGetColorSpace(imageRef), CGImageGetBitmapInfo(imageRef));
 	
 	CGContextConcatCTM				(ctx, transform);
+	CGContextScaleCTM				(ctx, scale, scale);
 	CGContextSetInterpolationQuality(ctx, kCGInterpolationHigh);
 	CGContextDrawImage				(ctx, rect, imageRef);
 	
 	CGImageRef scaledImageRef	= CGBitmapContextCreateImage(ctx);
-	UIImage* scaledImage		= [UIImage imageWithCGImage:scaledImageRef];
+	UIImage* scaledImage		= [UIImage imageWithCGImage:scaledImageRef scale:scale orientation:self.imageOrientation];
 	
 	CGContextRelease(ctx);
 	CGImageRelease	(scaledImageRef);
