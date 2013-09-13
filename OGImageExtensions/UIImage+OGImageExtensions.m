@@ -55,14 +55,15 @@
 	if (self.hasAlpha)
 		return self;
 	
+	CGFloat scale		= self.scale;
 	CGImageRef imageRef	= self.CGImage;
 	CGSize size			= self.size;
-	CGContextRef ctx	= CGBitmapContextCreate(NULL, size.width, size.height, 8, 0, CGImageGetColorSpace(imageRef), kCGBitmapByteOrderDefault|kCGImageAlphaPremultipliedFirst);
+	CGContextRef ctx	= CGBitmapContextCreate(NULL, size.width * scale, size.height * scale, 8, 0, CGImageGetColorSpace(imageRef), kCGBitmapByteOrderDefault|kCGImageAlphaPremultipliedFirst);
 	
 	CGContextDrawImage(ctx, (CGRect){0.f, 0.f, size}, imageRef);
 	
 	CGImageRef alphaImageRef	= CGBitmapContextCreateImage(ctx);
-	UIImage* alphaImage			= [UIImage imageWithCGImage:alphaImageRef];
+	UIImage* alphaImage			= [UIImage imageWithCGImage:alphaImageRef scale:scale orientation:self.imageOrientation];
 	
 	CGContextRelease(ctx);
 	CGImageRelease	(alphaImageRef);
@@ -73,8 +74,8 @@
 - (UIImage *)circularImage
 {
 	CGImageRef cgImage	= [self imageWithAlpha].CGImage;
-	CGSize size			= self.size;
-	CGRect rect			= {0.f, 0.f, size.width, size.width};
+	CGFloat scale		= self.scale;
+	CGRect rect			= {0.f, 0.f, self.size.width * scale, self.size.width * scale};
 	CGPoint center		= CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
 	CGFloat radius		= CGRectGetWidth(rect) / 2;
     CGContextRef ctx	= CGBitmapContextCreate(NULL, CGRectGetWidth(rect), CGRectGetWidth(rect), CGImageGetBitsPerComponent(cgImage), 0, CGImageGetColorSpace(cgImage), CGImageGetBitmapInfo(cgImage));
@@ -89,7 +90,7 @@
     CGContextDrawImage		(ctx, rect, cgImage);
 	
     cgImage					= CGBitmapContextCreateImage(ctx);
-    UIImage* roundedImage	= [UIImage imageWithCGImage:cgImage scale:self.scale orientation:self.imageOrientation];
+    UIImage* roundedImage	= [UIImage imageWithCGImage:cgImage scale:scale orientation:self.imageOrientation];
 	
     CGContextRelease(ctx);
     CGImageRelease	(cgImage);
@@ -113,7 +114,7 @@
     
     CIImage* blurredOutput	= [gaussianBlur valueForKey:kCIOutputImageKey];
 	CGImageRef cgImage		= [context createCGImage:blurredOutput fromRect:sourceImage.extent];
-	UIImage* blurredImage	= [UIImage imageWithCGImage:cgImage];
+	UIImage* blurredImage	= [UIImage imageWithCGImage:cgImage scale:self.scale orientation:self.imageOrientation];
 	
 	CGImageRelease(cgImage);
 	return blurredImage;
@@ -121,11 +122,12 @@
 
 - (UIImage *)imageMaskedWithImage:(UIImage *)image
 {
+	CGFloat scale				= self.scale;
 	CGImageRef imageRef			= image.CGImage;
 	CGSize size					= image.size;
-	CGImageRef maskRef			=  CGImageMaskCreate(size.width, size.height, CGImageGetBitsPerComponent(imageRef), CGImageGetBitsPerPixel(imageRef), CGImageGetBytesPerRow(imageRef), CGImageGetDataProvider(imageRef), NULL, false);
+	CGImageRef maskRef			= CGImageMaskCreate(size.width * scale, size.height * scale, CGImageGetBitsPerComponent(imageRef), CGImageGetBitsPerPixel(imageRef), CGImageGetBytesPerRow(imageRef), CGImageGetDataProvider(imageRef), NULL, false);
 	CGImageRef maskedImageRef	= CGImageCreateWithMask(self.CGImage, maskRef);
-	UIImage* maskedImage		= [UIImage imageWithCGImage:maskedImageRef];
+	UIImage* maskedImage		= [UIImage imageWithCGImage:maskedImageRef scale:scale orientation:self.imageOrientation];
 	
 	CGImageRelease(maskRef);
 	CGImageRelease(maskedImageRef);
@@ -148,8 +150,11 @@
 
 - (UIImage *)imageCroppedAtRect:(CGRect)rect
 {
+	CGFloat scale		= self.scale;
+	rect.size.width	   *= scale;
+	rect.size.height   *= scale;
 	CGImageRef imageRef	= CGImageCreateWithImageInRect(self.CGImage, rect);
-	UIImage* image		= [UIImage imageWithCGImage:imageRef];
+	UIImage* image		= [UIImage imageWithCGImage:imageRef scale:scale orientation:self.imageOrientation];
 	
 	CGImageRelease(imageRef);
 	return image;
