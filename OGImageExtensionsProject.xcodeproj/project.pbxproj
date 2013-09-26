@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09082AF917F25386007ACC45 /* OGImageExtensionsPersistor.m in Sources */ = {isa = PBXBuildFile; fileRef = 09082AF817F25386007ACC45 /* OGImageExtensionsPersistor.m */; };
 		09EA48B117BE4AE40026664E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09EA48B017BE4AE40026664E /* Foundation.framework */; };
 		09EA48B317BE4AE40026664E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09EA48B217BE4AE40026664E /* CoreGraphics.framework */; };
 		09EA48B517BE4AE40026664E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09EA48B417BE4AE40026664E /* UIKit.framework */; };
@@ -20,7 +21,6 @@
 		09EA48D417BE4AE50026664E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 09EA48D217BE4AE50026664E /* InfoPlist.strings */; };
 		09EA48D617BE4AE50026664E /* OGImageExtensionsProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 09EA48D517BE4AE50026664E /* OGImageExtensionsProjectTests.m */; };
 		09EA48E717BE4BCB0026664E /* UIImage+OGImageExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 09EA48E317BE4BCB0026664E /* UIImage+OGImageExtensions.m */; };
-		09EA48EB17BE4E620026664E /* OGImageExtensionsCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 09EA48EA17BE4E620026664E /* OGImageExtensionsCache.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +34,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		09082AF317F24F3A007ACC45 /* OGImageExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OGImageExtensions.h; sourceTree = "<group>"; };
+		09082AF417F25049007ACC45 /* OGImageExtensionsCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGImageExtensionsCommon.h; sourceTree = "<group>"; };
+		09082AF717F25386007ACC45 /* OGImageExtensionsPersistor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGImageExtensionsPersistor.h; sourceTree = "<group>"; };
+		09082AF817F25386007ACC45 /* OGImageExtensionsPersistor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OGImageExtensionsPersistor.m; sourceTree = "<group>"; };
 		09EA48AD17BE4AE40026664E /* OGImageExtensionsProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OGImageExtensionsProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		09EA48B017BE4AE40026664E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		09EA48B217BE4AE40026664E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -54,8 +58,6 @@
 		09EA48E217BE4BCB0026664E /* UIImage+OGImageExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OGImageExtensions.h"; sourceTree = "<group>"; };
 		09EA48E317BE4BCB0026664E /* UIImage+OGImageExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+OGImageExtensions.m"; sourceTree = "<group>"; };
 		09EA48E417BE4BCB0026664E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		09EA48E917BE4E620026664E /* OGImageExtensionsCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGImageExtensionsCache.h; sourceTree = "<group>"; };
-		09EA48EA17BE4E620026664E /* OGImageExtensionsCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OGImageExtensionsCache.m; sourceTree = "<group>"; };
 		09EA48EC17BE50EB0026664E /* OGImageExtensions.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = OGImageExtensions.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,8 +162,10 @@
 		09EA48E117BE4BCB0026664E /* OGImageExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				09EA48E917BE4E620026664E /* OGImageExtensionsCache.h */,
-				09EA48EA17BE4E620026664E /* OGImageExtensionsCache.m */,
+				09082AF317F24F3A007ACC45 /* OGImageExtensions.h */,
+				09082AF417F25049007ACC45 /* OGImageExtensionsCommon.h */,
+				09082AF717F25386007ACC45 /* OGImageExtensionsPersistor.h */,
+				09082AF817F25386007ACC45 /* OGImageExtensionsPersistor.m */,
 				09EA48E217BE4BCB0026664E /* UIImage+OGImageExtensions.h */,
 				09EA48E317BE4BCB0026664E /* UIImage+OGImageExtensions.m */,
 			);
@@ -264,7 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				09EA48EB17BE4E620026664E /* OGImageExtensionsCache.m in Sources */,
+				09082AF917F25386007ACC45 /* OGImageExtensionsPersistor.m in Sources */,
 				09EA48E717BE4BCB0026664E /* UIImage+OGImageExtensions.m in Sources */,
 				09EA48C117BE4AE40026664E /* OGAppDelegate.m in Sources */,
 				09EA48BD17BE4AE40026664E /* main.m in Sources */,

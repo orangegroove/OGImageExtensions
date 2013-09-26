@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "OGImageExtensions"
-  s.version      = "0.1.2"
+  s.version      = "0.1.3"
   s.summary      = "UIImage extensions and tools"
   s.homepage     = "https://github.com/OrangeGroove/OGImageExtensions"
   s.license      = { :type => "MIT" }

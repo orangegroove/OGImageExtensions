@@ -35,6 +35,25 @@
 
 #pragma mark - Public
 
+- (UIImage *)imageWithModifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size
+{
+	UIImage* image = self;
+	
+	if (!CGSizeEqualToSize(size, CGSizeZero) && !CGSizeEqualToSize(size, image.size))
+		image = [image imageAspectScaledToAtMostSize:size];
+	
+	if (modifier & OGImageExtensionsImageModifierCircular)
+		image = [image circularImage];
+	
+	if (modifier & OGImageExtensionsImageModifierGrayscale)
+		image = [image grayscaleImage];
+	
+	if (modifier & OGImageExtensionsImageModifierBlurred)
+		image = [image blurredImageWithBlurRadius:4.f];
+	
+	return image;
+}
+
 - (BOOL)hasAlpha
 {
 	CGImageAlphaInfo alpha = CGImageGetAlphaInfo(self.CGImage);
@@ -96,6 +115,46 @@
     CGImageRelease	(cgImage);
 	
     return roundedImage;
+}
+
+- (UIImage *)grayscaleImage
+{
+	static uint8_t kRed			= 1;
+	static uint8_t kGreen		= 2;
+	static uint8_t kBlue		= 3;
+	CGRect rect					= {0.f, 0.f, self.size.width * self.scale, self.size.height * self.scale};
+	size_t width				= (size_t)CGRectGetWidth(rect);
+	size_t height				= (size_t)CGRectGetHeight(rect);
+	size_t size					= width * height * sizeof(uint32_t);
+	uint32_t* buffer			= (uint32_t *)malloc(size);
+	CGColorSpaceRef colorSpace	= CGColorSpaceCreateDeviceRGB();
+	
+	memset(buffer, 0, size);
+	
+	CGContextRef ctx = CGBitmapContextCreate(buffer, width, height, 8, width * sizeof(uint32_t), colorSpace, kCGBitmapByteOrder32Little|kCGImageAlphaPremultipliedLast);
+	
+	CGContextDrawImage(ctx, CGRectMake(0.f, 0.f, width, height), self.CGImage);
+	
+	for (size_t y = 0; y < height; y++)
+		for (size_t x = 0; x < width; x++) {
+			
+			uint8_t* pixel	= (uint8_t *)&buffer[y * width + x];
+			uint8_t gray	= (uint8_t)((30 * pixel[kRed] + 59 * pixel[kGreen] + 11 * pixel[kBlue]) / 100);
+			
+			pixel[kRed]		= gray;
+			pixel[kGreen]	= gray;
+			pixel[kBlue]	= gray;
+		}
+	
+	CGImageRef imageRef = CGBitmapContextCreateImage(ctx);
+	UIImage* image		= [UIImage imageWithCGImage:imageRef scale:self.scale orientation:self.imageOrientation];
+	
+	CGContextRelease	(ctx);
+	CGColorSpaceRelease	(colorSpace);
+	free				(buffer);
+	CGImageRelease		(imageRef);
+	
+	return image;
 }
 
 - (UIImage *)blurredImageWithBlurRadius:(CGFloat)blurRadius

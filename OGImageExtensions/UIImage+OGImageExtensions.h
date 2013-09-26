@@ -23,6 +23,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OGImageExtensionsCommon.h"
 
 @interface UIImage (OGImageExtensions)
 
@@ -43,6 +44,12 @@
  @return
  */
 - (UIImage *)circularImage;
+
+/**
+ 
+ @return
+ */
+- (UIImage *)grayscaleImage;
 
 /**
  
@@ -135,5 +142,13 @@
  @note Preserves aspect ratio
  */
 - (UIImage *)imageAspectScaledToAtMostHeight:(CGFloat)height;
+
+/**
+ 
+ @param modifier
+ @param size
+ @return
+ */
+- (UIImage *)imageWithModifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size;
 
 @end
