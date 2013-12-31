@@ -99,7 +99,7 @@
 
 - (BOOL)persistImage:(UIImage *)image forKey:(NSString *)key modifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size
 {
-	NSFileManager* fm	= [NSFileManager defaultManager];
+	NSFileManager* fm	= NSFileManager.defaultManager;
 	NSString* path		= [self pathForKey:key modifier:modifier size:size];
 	NSData* data		= UIImagePNGRepresentation(image);
 	NSError* error		= nil;
@@ -135,12 +135,12 @@
 
 - (UIImage *)imageForKey:(NSString *)key
 {
-	return [self imageForKey:key modifier:OGImageExtensionsImageModifierNone size:CGSizeZero scale:[UIScreen mainScreen].scale];
+	return [self imageForKey:key modifier:OGImageExtensionsImageModifierNone size:CGSizeZero scale:UIScreen.mainScreen.scale];
 }
 
 - (UIImage *)imageForKey:(NSString *)key modifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size scale:(CGFloat)scale
 {
-	NSFileManager* fm	= [NSFileManager defaultManager];
+	NSFileManager* fm	= NSFileManager.defaultManager;
 	NSData* data		= [fm contentsAtPath:[self pathForKey:key modifier:modifier size:size]];
 	
 	if (data)
@@ -163,7 +163,7 @@
 - (void)removeImagesForKey:(NSString *)key
 {
 	NSError* error	= nil;
-	BOOL success	= [[NSFileManager defaultManager] removeItemAtPath:[self pathForKey:key] error:&error];
+	BOOL success	= [NSFileManager.defaultManager removeItemAtPath:[self pathForKey:key] error:&error];
 	
 #ifdef DEBUG
 	if (!success)
@@ -174,7 +174,7 @@
 - (void)removeAllImages
 {
 	NSError* error	= nil;
-	BOOL success	= [[NSFileManager defaultManager] removeItemAtPath:self.baseDirectory error:nil];
+	BOOL success	= [NSFileManager.defaultManager removeItemAtPath:self.baseDirectory error:nil];
 	
 #ifdef DEBUG
 	if (!success)
@@ -212,7 +212,7 @@
 {
 	NSMutableArray* keys	= [NSMutableArray array];
 	NSError* error			= nil;
-	NSArray* paths			= [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.baseDirectory error:&error];
+	NSArray* paths			= [NSFileManager.defaultManager contentsOfDirectoryAtPath:self.baseDirectory error:&error];
 	
 	if (!paths) {
 #ifdef DEBUG
@@ -248,7 +248,7 @@
 {
 	NSError* error				= nil;
 	NSString* path				= [self pathForKey:key modifier:OGImageExtensionsImageModifierNone size:CGSizeZero];
-	NSDictionary* attributes	= [[NSFileManager defaultManager] attributesOfItemAtPath:path error:&error];
+	NSDictionary* attributes	= [NSFileManager.defaultManager attributesOfItemAtPath:path error:&error];
 	
 	if (attributes)
 		return attributes[NSFileCreationDate];
@@ -265,7 +265,7 @@
 	NSDate* lastDate	= nil;
 	NSError* error		= nil;
 	NSString* path		= [self pathForKey:key];
-	NSArray* files		= [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
+	NSArray* files		= [NSFileManager.defaultManager contentsOfDirectoryAtPath:path error:&error];
 	
 	if (files.count)
 		for (NSString* filePath in files) {
