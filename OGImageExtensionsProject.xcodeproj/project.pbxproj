@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		09082AF917F25386007ACC45 /* OGImageExtensionsPersistor.m in Sources */ = {isa = PBXBuildFile; fileRef = 09082AF817F25386007ACC45 /* OGImageExtensionsPersistor.m */; };
+		0912EDF8187571B500E32C5C /* NSData+OGImageExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0912EDF7187571B500E32C5C /* NSData+OGImageExtensions.m */; };
 		09EA48B117BE4AE40026664E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09EA48B017BE4AE40026664E /* Foundation.framework */; };
 		09EA48B317BE4AE40026664E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09EA48B217BE4AE40026664E /* CoreGraphics.framework */; };
 		09EA48B517BE4AE40026664E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09EA48B417BE4AE40026664E /* UIKit.framework */; };
@@ -38,6 +39,8 @@
 		09082AF417F25049007ACC45 /* OGImageExtensionsCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGImageExtensionsCommon.h; sourceTree = "<group>"; };
 		09082AF717F25386007ACC45 /* OGImageExtensionsPersistor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGImageExtensionsPersistor.h; sourceTree = "<group>"; };
 		09082AF817F25386007ACC45 /* OGImageExtensionsPersistor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OGImageExtensionsPersistor.m; sourceTree = "<group>"; };
+		0912EDF6187571B500E32C5C /* NSData+OGImageExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+OGImageExtensions.h"; sourceTree = "<group>"; };
+		0912EDF7187571B500E32C5C /* NSData+OGImageExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+OGImageExtensions.m"; sourceTree = "<group>"; };
 		09EA48AD17BE4AE40026664E /* OGImageExtensionsProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OGImageExtensionsProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		09EA48B017BE4AE40026664E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		09EA48B217BE4AE40026664E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -168,6 +171,8 @@
 				09082AF817F25386007ACC45 /* OGImageExtensionsPersistor.m */,
 				09EA48E217BE4BCB0026664E /* UIImage+OGImageExtensions.h */,
 				09EA48E317BE4BCB0026664E /* UIImage+OGImageExtensions.m */,
+				0912EDF6187571B500E32C5C /* NSData+OGImageExtensions.h */,
+				0912EDF7187571B500E32C5C /* NSData+OGImageExtensions.m */,
 			);
 			path = OGImageExtensions;
 			sourceTree = "<group>";
@@ -268,6 +273,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0912EDF8187571B500E32C5C /* NSData+OGImageExtensions.m in Sources */,
 				09082AF917F25386007ACC45 /* OGImageExtensionsPersistor.m in Sources */,
 				09EA48E717BE4BCB0026664E /* UIImage+OGImageExtensions.m in Sources */,
 				09EA48C117BE4AE40026664E /* OGAppDelegate.m in Sources */,

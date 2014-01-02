@@ -27,3 +27,4 @@
 #import "OGImageExtensionsCommon.h"
 #import "OGImageExtensionsPersistor.h"
 #import "UIImage+OGImageExtensions.h"
+#import "NSData+OGImageExtensions.h"
