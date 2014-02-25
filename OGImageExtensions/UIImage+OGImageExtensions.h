@@ -22,7 +22,6 @@
 //  IN THE SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
 #import "OGImageExtensionsCommon.h"
 
 @interface UIImage (OGImageExtensions)

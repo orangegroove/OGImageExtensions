@@ -22,8 +22,6 @@
 //  IN THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "OGImageExtensionsCommon.h"
 #import "OGImageExtensionsPersistor.h"
 #import "UIImage+OGImageExtensions.h"

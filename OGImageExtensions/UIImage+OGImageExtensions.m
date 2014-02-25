@@ -22,8 +22,9 @@
 //  IN THE SOFTWARE.
 //
 
-#import <CoreImage/CoreImage.h>
+@import CoreImage;
 #import "UIImage+OGImageExtensions.h"
+#import "OGImageExtensions.h"
 
 @interface UIImage (OrangeExtensionsPrivate)
 

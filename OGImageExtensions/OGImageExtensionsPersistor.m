@@ -23,7 +23,7 @@
 //
 
 #import "OGImageExtensionsPersistor.h"
-#import "UIImage+OGImageExtensions.h"
+#import "OGImageExtensions.h"
 
 @interface OGImageExtensionsPersistor ()
 
@@ -103,31 +103,28 @@
 	NSString* path		= [self pathForKey:key modifier:modifier size:size];
 	NSData* data		= UIImagePNGRepresentation(image);
 	NSError* error		= nil;
+	BOOL success		= [fm createDirectoryAtPath:[self pathForKey:key] withIntermediateDirectories:YES attributes:nil error:&error];
 	
-	if (![fm createDirectoryAtPath:[self pathForKey:key] withIntermediateDirectories:YES attributes:nil error:&error]) {
-#ifdef DEBUG
-		OGImageExtensionsLog(@"Error creating directory for key %@ at %@: %@", key, [self pathForKey:key], error);
-#endif
+	NSAssert(success, @"Error creating directory for key %@ at %@: %@", key, [self pathForKey:key], error);
+	
+	if (!success)
 		return NO;
-	}
-	else if (![fm createFileAtPath:path contents:data attributes:@{NSFileCreationDate: [NSDate date]}]) {
-#ifdef DEBUG
-		OGImageExtensionsLog(@"Error creating file for key %@ at %@: %@", key, path, error);
-#endif
+	
+	success = [fm createFileAtPath:path contents:data attributes:@{NSFileCreationDate: [NSDate date]}];
+	
+	NSAssert(success, @"Error creating file for key %@ at %@: %@", key, path, error);
+	
+	if (!success)
 		return NO;
-	}
 	
 	if (self.type == OGImageExtensionsPersistorTypeUserGenerated) {
 		
 		NSError* error	= nil;
-		BOOL success	= [[NSURL fileURLWithPath:path] setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:&error];
+		success			= [[NSURL fileURLWithPath:path] setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:&error];
 		
-		if (!success) {
-#ifdef DEBUG
-			OGImageExtensionsLog(@"Error setting attribute: %@", error);
-#endif
-			return NO;
-		}
+		NSAssert(success, @"Error setting attribute: %@", error);
+		
+		return success;
 	}
 	
 	return YES;
@@ -165,10 +162,7 @@
 	NSError* error	= nil;
 	BOOL success	= [NSFileManager.defaultManager removeItemAtPath:[self pathForKey:key] error:&error];
 	
-#ifdef DEBUG
-	if (!success)
-		OGImageExtensionsLog(@"Error removing images for key %@ at %@: %@", key, [self pathForKey:key], error);
-#endif
+	NSAssert(success, @"Error removing images for key %@ at %@: %@", key, [self pathForKey:key], error);
 }
 
 - (void)removeAllImages
@@ -176,10 +170,7 @@
 	NSError* error	= nil;
 	BOOL success	= [NSFileManager.defaultManager removeItemAtPath:self.baseDirectory error:nil];
 	
-#ifdef DEBUG
-	if (!success)
-		OGImageExtensionsLog(@"Error removing images at %@: %@", self.baseDirectory, error);
-#endif
+	NSAssert(success, @"Error removing images at %@: %@", self.baseDirectory, error);
 }
 
 - (void)removeImagesCreatedEarlierThan:(NSDate *)date
@@ -214,12 +205,7 @@
 	NSError* error			= nil;
 	NSArray* paths			= [NSFileManager.defaultManager contentsOfDirectoryAtPath:self.baseDirectory error:&error];
 	
-	if (!paths) {
-#ifdef DEBUG
-		OGImageExtensionsLog(@"Error retrieving paths: %@", error);
-#endif
-		return nil;
-	}
+	NSAssert(!!paths, @"Error retrieving paths: %@", error);
 	
 	for (NSString* path in paths) {
 		
@@ -250,14 +236,9 @@
 	NSString* path				= [self pathForKey:key modifier:OGImageExtensionsImageModifierNone size:CGSizeZero];
 	NSDictionary* attributes	= [NSFileManager.defaultManager attributesOfItemAtPath:path error:&error];
 	
-	if (attributes)
-		return attributes[NSFileCreationDate];
-#ifdef DEBUG
-	else
-		OGImageExtensionsLog(@"Error retrieving creation date for key %@ at %@: %@", key, path, error);
-#endif
+	NSAssert(!!attributes, @"Error retrieving creation date for key %@ at %@: %@", key, path, error);
 	
-	return nil;
+	return attributes[NSFileCreationDate];
 }
 
 - (NSDate *)lastAccessDateForKey:(NSString *)key
@@ -267,25 +248,20 @@
 	NSString* path		= [self pathForKey:key];
 	NSArray* files		= [NSFileManager.defaultManager contentsOfDirectoryAtPath:path error:&error];
 	
-	if (files.count)
-		for (NSString* filePath in files) {
-			
-			NSError* fileError	= nil;
-			NSDate* date		= nil;
-			NSURL* url			= [NSURL fileURLWithPath:filePath];
-			
-			if (![url getResourceValue:&date forKey:NSURLContentAccessDateKey error:&fileError]) {
-#ifdef DEBUG
-				OGImageExtensionsLog(@"Error retrieving access date for key %@ at %@: %@", key, path, error);
-#endif
-			}
-			else if (date)
-				lastDate = [date laterDate:lastDate];
-		}
-#ifdef DEBUG
-	else if (!files)
-		OGImageExtensionsLog(@"Error retrieving contents of directory for key %@ at %@: %@", key, path, error);
-#endif
+	NSAssert(!!files, @"Error retrieving contents of directory for key %@ at %@: %@", key, path, error);
+	
+	for (NSString* filePath in files) {
+		
+		NSError* fileError		= nil;
+		NSDate* date			= nil;
+		NSURL* url				= [NSURL fileURLWithPath:filePath];
+		BOOL success			= [url getResourceValue:&date forKey:NSURLContentAccessDateKey error:&fileError];
+		
+		NSAssert(success, @"Error retrieving access date for key %@ at %@: %@", key, path, error);
+		
+		if (success)
+			lastDate = [date laterDate:lastDate];
+	}
 	
 	return lastDate;
 }

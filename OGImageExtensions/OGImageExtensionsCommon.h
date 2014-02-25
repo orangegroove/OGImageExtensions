@@ -22,9 +22,8 @@
 //  IN THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-
-#define OGImageExtensionsLog(f, ...) NSLog((@"\nOGImageExtensions %s[%d]\n" f),__func__,__LINE__,##__VA_ARGS__)
+@import Foundation;
+@import UIKit;
 
 typedef NS_OPTIONS(uint64_t, OGImageExtensionsImageModifier)
 {
@@ -33,3 +32,14 @@ typedef NS_OPTIONS(uint64_t, OGImageExtensionsImageModifier)
 	OGImageExtensionsImageModifierGrayscale	= 1 << 1,
 	OGImageExtensionsImageModifierBlurred	= 1 << 2
 };
+
+typedef NS_ENUM(uint8_t, OGImageExtensionsImageType)
+{
+	OGImageExtensionsImageTypeUnknown,
+	OGImageExtensionsImageTypePNG,
+	OGImageExtensionsImageTypeJPEG,
+	OGImageExtensionsImageTypeTIFF,
+	OGImageExtensionsImageTypeBMP,
+	OGImageExtensionsImageTypeGIF
+};
+

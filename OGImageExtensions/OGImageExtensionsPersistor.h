@@ -24,7 +24,6 @@
 
 // namespace and keys can't contain slashes
 
-#import <Foundation/Foundation.h>
 #import "OGImageExtensionsCommon.h"
 
 typedef NS_ENUM(int8_t, OGImageExtensionsPersistorType)
