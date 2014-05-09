@@ -159,16 +159,16 @@
 
 - (void)removeImagesForKey:(NSString *)key
 {
-	NSError* error	= nil;
-	BOOL success	= [NSFileManager.defaultManager removeItemAtPath:[self pathForKey:key] error:&error];
+	NSError* error			= nil;
+	__unused BOOL success	= [NSFileManager.defaultManager removeItemAtPath:[self pathForKey:key] error:&error];
 	
 	NSAssert(success, @"Error removing images for key %@ at %@: %@", key, [self pathForKey:key], error);
 }
 
 - (void)removeAllImages
 {
-	NSError* error	= nil;
-	BOOL success	= [NSFileManager.defaultManager removeItemAtPath:self.baseDirectory error:nil];
+	NSError* error			= nil;
+	__unused BOOL success	= [NSFileManager.defaultManager removeItemAtPath:self.baseDirectory error:&error];
 	
 	NSAssert(success, @"Error removing images at %@: %@", self.baseDirectory, error);
 }
