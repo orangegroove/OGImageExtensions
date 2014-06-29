@@ -31,12 +31,10 @@
 
 - (NSArray *)existingKeys;
 
-- (NSString *)pathForKey:(NSString *)key;
-- (NSString *)pathForKey:(NSString *)key modifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size;
+- (NSString *)directoryPathForKey:(NSString *)key;
 
 - (NSDate *)creationDateForKey:(NSString *)key;
 - (NSDate *)lastAccessDateForKey:(NSString *)key;
-
 
 @end
 @implementation OGImageExtensionsPersistor
@@ -100,12 +98,12 @@
 - (BOOL)persistImage:(UIImage *)image forKey:(NSString *)key modifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size
 {
 	NSFileManager* fm	= NSFileManager.defaultManager;
-	NSString* path		= [self pathForKey:key modifier:modifier size:size];
+	NSString* path		= [self filePathForKey:key modifier:modifier size:size];
 	NSData* data		= UIImagePNGRepresentation(image);
 	NSError* error		= nil;
-	BOOL success		= [fm createDirectoryAtPath:[self pathForKey:key] withIntermediateDirectories:YES attributes:nil error:&error];
+	BOOL success		= [fm createDirectoryAtPath:[self directoryPathForKey:key] withIntermediateDirectories:YES attributes:nil error:&error];
 	
-	NSAssert(success, @"Error creating directory for key %@ at %@: %@", key, [self pathForKey:key], error);
+	NSAssert(success, @"Error creating directory for key %@ at %@: %@", key, [self directoryPathForKey:key], error);
 	
 	if (!success)
 		return NO;
@@ -138,12 +136,12 @@
 - (UIImage *)imageForKey:(NSString *)key modifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size scale:(CGFloat)scale
 {
 	NSFileManager* fm	= NSFileManager.defaultManager;
-	NSData* data		= [fm contentsAtPath:[self pathForKey:key modifier:modifier size:size]];
+	NSData* data		= [fm contentsAtPath:[self filePathForKey:key modifier:modifier size:size]];
 	
 	if (data)
 		return [UIImage imageWithData:data scale:scale];
 	
-	data = [fm contentsAtPath:[self pathForKey:key modifier:OGImageExtensionsImageModifierNone size:CGSizeZero]];
+	data = [fm contentsAtPath:[self filePathForKey:key modifier:OGImageExtensionsImageModifierNone size:CGSizeZero]];
 	
 	if (data) {
 		
@@ -160,9 +158,9 @@
 - (void)removeImagesForKey:(NSString *)key
 {
 	NSError* error			= nil;
-	__unused BOOL success	= [NSFileManager.defaultManager removeItemAtPath:[self pathForKey:key] error:&error];
+	__unused BOOL success	= [NSFileManager.defaultManager removeItemAtPath:[self directoryPathForKey:key] error:&error];
 	
-	NSAssert(success, @"Error removing images for key %@ at %@: %@", key, [self pathForKey:key], error);
+	NSAssert(success, @"Error removing images for key %@ at %@: %@", key, [self directoryPathForKey:key], error);
 }
 
 - (void)removeAllImages
@@ -197,6 +195,11 @@
 			[self removeImagesForKey:key];
 }
 
+- (NSString *)filePathForKey:(NSString *)key modifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size
+{
+	return [self.baseDirectory stringByAppendingFormat:@"%@/%llu%0.f%0.f", key, modifier, size.width, size.height];
+}
+
 #pragma mark - Private
 
 - (NSArray *)existingKeys
@@ -220,20 +223,15 @@
 	return [NSArray arrayWithArray:keys];
 }
 
-- (NSString *)pathForKey:(NSString *)key
+- (NSString *)directoryPathForKey:(NSString *)key
 {
 	return [self.baseDirectory stringByAppendingFormat:@"%@", key];
-}
-
-- (NSString *)pathForKey:(NSString *)key modifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size
-{
-	return [self.baseDirectory stringByAppendingFormat:@"%@/%llu%0.f%0.f", key, modifier, size.width, size.height];
 }
 
 - (NSDate *)creationDateForKey:(NSString *)key
 {
 	NSError* error				= nil;
-	NSString* path				= [self pathForKey:key modifier:OGImageExtensionsImageModifierNone size:CGSizeZero];
+	NSString* path				= [self filePathForKey:key modifier:OGImageExtensionsImageModifierNone size:CGSizeZero];
 	NSDictionary* attributes	= [NSFileManager.defaultManager attributesOfItemAtPath:path error:&error];
 	
 	NSAssert(!!attributes, @"Error retrieving creation date for key %@ at %@: %@", key, path, error);
@@ -245,7 +243,7 @@
 {
 	NSDate* lastDate	= nil;
 	NSError* error		= nil;
-	NSString* path		= [self pathForKey:key];
+	NSString* path		= [self directoryPathForKey:key];
 	NSArray* files		= [NSFileManager.defaultManager contentsOfDirectoryAtPath:path error:&error];
 	
 	NSAssert(!!files, @"Error retrieving contents of directory for key %@ at %@: %@", key, path, error);

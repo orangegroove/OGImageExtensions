@@ -53,4 +53,6 @@ typedef NS_ENUM(int8_t, OGImageExtensionsPersistorType)
 - (void)removeImagesCreatedEarlierThan:(NSDate *)date;
 - (void)removeImagesAccessedEarlierThan:(NSDate *)date;
 
+- (NSString *)filePathForKey:(NSString *)key modifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size;
+
 @end
