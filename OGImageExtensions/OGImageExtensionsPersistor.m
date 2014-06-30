@@ -108,7 +108,7 @@
 	if (!success)
 		return NO;
 	
-	success = [fm createFileAtPath:path contents:data attributes:@{NSFileCreationDate: [NSDate date]}];
+	success = [data writeToFile:path options:NSDataWritingAtomic error:&error];
 	
 	NSAssert(success, @"Error creating file for key %@ at %@: %@", key, path, error);
 	
