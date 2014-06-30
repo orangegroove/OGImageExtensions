@@ -197,7 +197,7 @@
 
 - (NSString *)filePathForKey:(NSString *)key modifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size
 {
-	return [self.baseDirectory stringByAppendingFormat:@"%@/%llu%0.f%0.f", key, modifier, size.width, size.height];
+	return [self.baseDirectory stringByAppendingFormat:@"%@/%llu_%0.f_%0.f", key, modifier, size.width, size.height];
 }
 
 #pragma mark - Private
