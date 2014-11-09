@@ -145,7 +145,7 @@
 	
 	if (data) {
 		
-		UIImage* image = [[UIImage imageWithData:data scale:scale] imageWithModifier:modifier size:size];
+		UIImage* image = [[UIImage imageWithData:data scale:scale] og_imageWithModifier:modifier size:size];
 		
 		[self persistImage:image forKey:key modifier:modifier size:size];
 		
