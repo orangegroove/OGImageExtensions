@@ -28,10 +28,10 @@
 
 typedef NS_ENUM(int8_t, OGImageExtensionsPersistorType)
 {
-	OGImageExtensionsPersistorTypeTemporary,		// Will be removed when the persistor is deallocated
-	OGImageExtensionsPersistorTypeReloadable,		// Can be removed by the system when needed
-	OGImageExtensionsPersistorTypeUserGenerated,	// Never removed by system
-	OGImageExtensionsPersistorTypeBackedUp			// Never removed by system, and is backed up to iCloud
+	OGImageExtensionsPersistorTypeTemporary,		 // Will be removed when the persistor is deallocated
+	OGImageExtensionsPersistorTypeReloadable,	 // Can be removed by the system when needed
+	OGImageExtensionsPersistorTypeUserGenerated, // Never removed by system
+	OGImageExtensionsPersistorTypeBackedUp		 // Never removed by system, and is backed up to iCloud
 };
 
 @interface OGImageExtensionsPersistor : NSObject

@@ -30,6 +30,6 @@
  
  Original code by https://github.com/NSProgrammer
  */
-- (OGImageExtensionsImageType)typeOfImageData;
+- (OGImageExtensionsImageType)og_typeOfImageData;
 
 @end

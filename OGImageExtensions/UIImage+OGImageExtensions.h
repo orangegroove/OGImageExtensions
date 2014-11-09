@@ -30,39 +30,39 @@
  
  @return
  */
-- (BOOL)hasAlpha;
+- (BOOL)og_hasAlpha;
 
 /**
  
  @return
  */
-- (UIImage *)imageWithAlpha;
+- (UIImage *)og_imageWithAlpha;
 
 /**
  
  @return
  */
-- (UIImage *)circularImage;
+- (UIImage *)og_circularImage;
 
 /**
  
  @return
  */
-- (UIImage *)grayscaleImage;
+- (UIImage *)og_grayscaleImage;
 
 /**
  
  @param blurRadius
  @return
  */
-- (UIImage *)blurredImageWithBlurRadius:(CGFloat)blurRadius;
+- (UIImage *)og_blurredImageWithBlurRadius:(CGFloat)blurRadius;
 
 /**
  
  @param image
  @return
  */
-- (UIImage *)imageMaskedWithImage:(UIImage *)image;
+- (UIImage *)og_imageMaskedWithImage:(UIImage *)image;
 
 /**
  
@@ -70,21 +70,21 @@
  @param point
  @return
  */
-- (UIImage *)imageByAddingImage:(UIImage *)image atPoint:(CGPoint)point;
+- (UIImage *)og_imageByAddingImage:(UIImage *)image atPoint:(CGPoint)point;
 
 /**
  
  @param rect
  @return
  */
-- (UIImage *)imageCroppedAtRect:(CGRect)rect;
+- (UIImage *)og_imageCroppedAtRect:(CGRect)rect;
 
 /**
  
  @param size
  @return
  */
-- (UIImage *)imageCenterCroppedToSize:(CGSize)size;
+- (UIImage *)og_imageCenterCroppedToSize:(CGSize)size;
 
 /**
  
@@ -92,7 +92,7 @@
  @return
  @note Does not preserve aspect ratio
  */
-- (UIImage *)imageScaledToSize:(CGSize)size;
+- (UIImage *)og_imageScaledToSize:(CGSize)size;
 
 /**
  
@@ -100,7 +100,7 @@
  @return
  @note Preserves aspect ratio
  */
-- (UIImage *)imageAspectScaledToAtLeastSize:(CGSize)size;
+- (UIImage *)og_imageAspectScaledToAtLeastSize:(CGSize)size;
 
 /**
  
@@ -108,7 +108,7 @@
  @return
  @note Preserves aspect ratio
  */
-- (UIImage *)imageAspectScaledToAtMostSize:(CGSize)size;
+- (UIImage *)og_imageAspectScaledToAtMostSize:(CGSize)size;
 
 /**
  
@@ -116,7 +116,7 @@
  @return
  @note Preserves aspect ratio
  */
-- (UIImage *)imageAspectScaledToAtLeastWidth:(CGFloat)width;
+- (UIImage *)og_imageAspectScaledToAtLeastWidth:(CGFloat)width;
 
 /**
  
@@ -124,7 +124,7 @@
  @return
  @note Preserves aspect ratio
  */
-- (UIImage *)imageAspectScaledToAtMostWidth:(CGFloat)width;
+- (UIImage *)og_imageAspectScaledToAtMostWidth:(CGFloat)width;
 
 /**
  
@@ -132,7 +132,7 @@
  @return
  @note Preserves aspect ratio
  */
-- (UIImage *)imageAspectScaledToAtLeastHeight:(CGFloat)height;
+- (UIImage *)og_imageAspectScaledToAtLeastHeight:(CGFloat)height;
 
 /**
  
@@ -140,7 +140,7 @@
  @return
  @note Preserves aspect ratio
  */
-- (UIImage *)imageAspectScaledToAtMostHeight:(CGFloat)height;
+- (UIImage *)og_imageAspectScaledToAtMostHeight:(CGFloat)height;
 
 /**
  
@@ -148,6 +148,6 @@
  @param size
  @return
  */
-- (UIImage *)imageWithModifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size;
+- (UIImage *)og_imageWithModifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size;
 
 @end

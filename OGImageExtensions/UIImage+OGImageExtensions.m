@@ -28,38 +28,47 @@
 
 @interface UIImage (OrangeExtensionsPrivate)
 
-- (CGAffineTransform)transformForSize:(CGSize)size;
-- (BOOL)transpose;
+- (CGAffineTransform)og_transformForSize:(CGSize)size;
+- (BOOL)og_transpose;
 
 @end
 @implementation UIImage (OrangeExtensions)
 
 #pragma mark - Public
 
-- (UIImage *)imageWithModifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size
+- (UIImage *)og_imageWithModifier:(OGImageExtensionsImageModifier)modifier size:(CGSize)size
 {
 	UIImage* image = self;
 	
 	if (!CGSizeEqualToSize(size, CGSizeZero) && !CGSizeEqualToSize(size, image.size))
-		image = [image imageAspectScaledToAtMostSize:size];
+    {
+        image = [image og_imageAspectScaledToAtMostSize:size];
+    }
 	
 	if (modifier & OGImageExtensionsImageModifierCircular)
-		image = [image circularImage];
+    {
+        image = [image og_circularImage];
+    }
 	
 	if (modifier & OGImageExtensionsImageModifierGrayscale)
-		image = [image grayscaleImage];
+    {
+        image = [image og_grayscaleImage];
+    }
 	
 	if (modifier & OGImageExtensionsImageModifierBlurred)
-		image = [image blurredImageWithBlurRadius:4.f];
+    {
+        image = [image og_blurredImageWithBlurRadius:4.f];
+    }
 	
 	return image;
 }
 
-- (BOOL)hasAlpha
+- (BOOL)og_hasAlpha
 {
 	CGImageAlphaInfo alpha = CGImageGetAlphaInfo(self.CGImage);
 	
-	switch (alpha) {
+	switch (alpha)
+    {
 		case kCGImageAlphaFirst:
 		case kCGImageAlphaLast:
 		case kCGImageAlphaPremultipliedFirst:
@@ -70,20 +79,19 @@
 	}
 }
 
-- (UIImage *)imageWithAlpha
+- (UIImage *)og_imageWithAlpha
 {
-	if (self.hasAlpha)
-		return self;
+	if (self.og_hasAlpha) return self;
 	
-	CGFloat scale		= self.scale;
-	CGImageRef imageRef	= self.CGImage;
-	CGSize size			= self.size;
-	CGContextRef ctx	= CGBitmapContextCreate(NULL, size.width * scale, size.height * scale, 8, 0, CGImageGetColorSpace(imageRef), kCGBitmapByteOrderDefault|kCGImageAlphaPremultipliedFirst);
+    CGFloat scale       = self.scale;
+    CGImageRef imageRef = self.CGImage;
+    CGSize size         = self.size;
+    CGContextRef ctx    = CGBitmapContextCreate(NULL, size.width * scale, size.height * scale, 8, 0, CGImageGetColorSpace(imageRef), kCGBitmapByteOrderDefault|kCGImageAlphaPremultipliedFirst);
 	
 	CGContextDrawImage(ctx, (CGRect){0.f, 0.f, size}, imageRef);
 	
-	CGImageRef alphaImageRef	= CGBitmapContextCreateImage(ctx);
-	UIImage* alphaImage			= [UIImage imageWithCGImage:alphaImageRef scale:scale orientation:self.imageOrientation];
+    CGImageRef alphaImageRef = CGBitmapContextCreateImage(ctx);
+    UIImage* alphaImage      = [UIImage imageWithCGImage:alphaImageRef scale:scale orientation:self.imageOrientation];
 	
 	CGContextRelease(ctx);
 	CGImageRelease	(alphaImageRef);
@@ -91,26 +99,26 @@
 	return alphaImage;
 }
 
-- (UIImage *)circularImage
+- (UIImage *)og_circularImage
 {
-	CGImageRef cgImage	= [self imageWithAlpha].CGImage;
-	CGFloat scale		= self.scale;
-	CGRect rect			= {0.f, 0.f, self.size.width * scale, self.size.width * scale};
-	CGPoint center		= CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
-	CGFloat radius		= CGRectGetWidth(rect) / 2;
-    CGContextRef ctx	= CGBitmapContextCreate(NULL, CGRectGetWidth(rect), CGRectGetWidth(rect), CGImageGetBitsPerComponent(cgImage), 0, CGImageGetColorSpace(cgImage), CGImageGetBitmapInfo(cgImage));
+    CGImageRef cgImage = [self og_imageWithAlpha].CGImage;
+    CGFloat scale      = self.scale;
+    CGRect rect        = {0.f, 0.f, self.size.width * scale, self.size.width * scale};
+    CGPoint center     = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
+    CGFloat radius     = CGRectGetWidth(rect) / 2;
+    CGContextRef ctx   = CGBitmapContextCreate(NULL, CGRectGetWidth(rect), CGRectGetWidth(rect), CGImageGetBitsPerComponent(cgImage), 0, CGImageGetColorSpace(cgImage), CGImageGetBitmapInfo(cgImage));
 	
-    CGContextSaveGState		(ctx);
-    CGContextBeginPath		(ctx);
-	CGContextMoveToPoint	(ctx, CGRectGetWidth(rect), radius);
-	CGContextAddArc			(ctx, center.x, center.y, radius, 0.f, (CGFloat)(M_PI * 2), 0);
-    CGContextClosePath		(ctx);
-    CGContextRestoreGState	(ctx);
-    CGContextClip			(ctx);
-    CGContextDrawImage		(ctx, rect, cgImage);
+    CGContextSaveGState	  (ctx);
+    CGContextBeginPath	  (ctx);
+	CGContextMoveToPoint  (ctx, CGRectGetWidth(rect), radius);
+	CGContextAddArc		  (ctx, center.x, center.y, radius, 0.f, (CGFloat)(M_PI * 2), 0);
+    CGContextClosePath	  (ctx);
+    CGContextRestoreGState(ctx);
+    CGContextClip		  (ctx);
+    CGContextDrawImage	  (ctx, rect, cgImage);
 	
-    cgImage					= CGBitmapContextCreateImage(ctx);
-    UIImage* roundedImage	= [UIImage imageWithCGImage:cgImage scale:scale orientation:self.imageOrientation];
+    cgImage               = CGBitmapContextCreateImage(ctx);
+    UIImage* roundedImage = [UIImage imageWithCGImage:cgImage scale:scale orientation:self.imageOrientation];
 	
     CGContextRelease(ctx);
     CGImageRelease	(cgImage);
@@ -118,17 +126,17 @@
     return roundedImage;
 }
 
-- (UIImage *)grayscaleImage
+- (UIImage *)og_grayscaleImage
 {
-	static uint8_t kRed			= 1;
-	static uint8_t kGreen		= 2;
-	static uint8_t kBlue		= 3;
-	CGRect rect					= {0.f, 0.f, self.size.width * self.scale, self.size.height * self.scale};
-	size_t width				= (size_t)CGRectGetWidth(rect);
-	size_t height				= (size_t)CGRectGetHeight(rect);
-	size_t size					= width * height * sizeof(uint32_t);
-	uint32_t* buffer			= (uint32_t *)malloc(size);
-	CGColorSpaceRef colorSpace	= CGColorSpaceCreateDeviceRGB();
+    static uint8_t kRed        = 1;
+    static uint8_t kGreen      = 2;
+    static uint8_t kBlue       = 3;
+    CGRect rect                = {0.f, 0.f, self.size.width * self.scale, self.size.height * self.scale};
+    size_t width               = (size_t)CGRectGetWidth(rect);
+    size_t height              = (size_t)CGRectGetHeight(rect);
+    size_t size                = width * height * sizeof(uint32_t);
+    uint32_t* buffer           = (uint32_t *)malloc(size);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	
 	memset(buffer, 0, size);
 	
@@ -139,55 +147,54 @@
 	for (size_t y = 0; y < height; y++)
 		for (size_t x = 0; x < width; x++) {
 			
-			uint8_t* pixel	= (uint8_t *)&buffer[y * width + x];
-			uint8_t gray	= (uint8_t)((30 * pixel[kRed] + 59 * pixel[kGreen] + 11 * pixel[kBlue]) / 100);
-			
-			pixel[kRed]		= gray;
-			pixel[kGreen]	= gray;
-			pixel[kBlue]	= gray;
+            uint8_t* pixel = (uint8_t *)&buffer[y * width + x];
+            uint8_t gray   = (uint8_t)((30 * pixel[kRed] + 59 * pixel[kGreen] + 11 * pixel[kBlue]) / 100);
+
+            pixel[kRed]    = gray;
+            pixel[kGreen]  = gray;
+            pixel[kBlue]   = gray;
 		}
 	
 	CGImageRef imageRef = CGBitmapContextCreateImage(ctx);
 	UIImage* image		= [UIImage imageWithCGImage:imageRef scale:self.scale orientation:self.imageOrientation];
 	
-	CGContextRelease	(ctx);
-	CGColorSpaceRelease	(colorSpace);
-	free				(buffer);
-	CGImageRelease		(imageRef);
+	CGContextRelease   (ctx);
+	CGColorSpaceRelease(colorSpace);
+	free			   (buffer);
+	CGImageRelease	   (imageRef);
 	
 	return image;
 }
 
-- (UIImage *)blurredImageWithBlurRadius:(CGFloat)blurRadius
+- (UIImage *)og_blurredImageWithBlurRadius:(CGFloat)blurRadius
 {
-    CIContext* context		= [CIContext contextWithOptions:nil];
-    CIImage* sourceImage	= [CIImage imageWithCGImage:[self imageWithAlpha].CGImage];
-    CIFilter* clamp			= [CIFilter filterWithName:@"CIAffineClamp"];
-    CIFilter* gaussianBlur	= [CIFilter filterWithName:@"CIGaussianBlur"];
+    CIContext* context     = [CIContext contextWithOptions:nil];
+    CIImage* sourceImage   = [CIImage imageWithCGImage:[self og_imageWithAlpha].CGImage];
+    CIFilter* clamp        = [CIFilter filterWithName:@"CIAffineClamp"];
+    CIFilter* gaussianBlur = [CIFilter filterWithName:@"CIGaussianBlur"];
     
-    if (!clamp || !gaussianBlur)
-		return self;
+    if (!clamp || !gaussianBlur) return self;
 	
-    [clamp			setValue:sourceImage							forKey:kCIInputImageKey];
-    [gaussianBlur	setValue:[clamp valueForKey:kCIOutputImageKey]	forKey:kCIInputImageKey];
-    [gaussianBlur	setValue:@(blurRadius)							forKey:kCIInputRadiusKey];
+    [clamp		  setValue:sourceImage							 forKey:kCIInputImageKey];
+    [gaussianBlur setValue:[clamp valueForKey:kCIOutputImageKey] forKey:kCIInputImageKey];
+    [gaussianBlur setValue:@(blurRadius)							 forKey:kCIInputRadiusKey];
     
-    CIImage* blurredOutput	= [gaussianBlur valueForKey:kCIOutputImageKey];
-	CGImageRef cgImage		= [context createCGImage:blurredOutput fromRect:sourceImage.extent];
-	UIImage* blurredImage	= [UIImage imageWithCGImage:cgImage scale:self.scale orientation:self.imageOrientation];
+    CIImage* blurredOutput = [gaussianBlur valueForKey:kCIOutputImageKey];
+    CGImageRef cgImage     = [context createCGImage:blurredOutput fromRect:sourceImage.extent];
+    UIImage* blurredImage  = [UIImage imageWithCGImage:cgImage scale:self.scale orientation:self.imageOrientation];
 	
 	CGImageRelease(cgImage);
 	return blurredImage;
 }
 
-- (UIImage *)imageMaskedWithImage:(UIImage *)image
+- (UIImage *)og_imageMaskedWithImage:(UIImage *)image
 {
-	CGFloat scale				= self.scale;
-	CGImageRef imageRef			= image.CGImage;
-	CGSize size					= image.size;
-	CGImageRef maskRef			= CGImageMaskCreate(size.width * scale, size.height * scale, CGImageGetBitsPerComponent(imageRef), CGImageGetBitsPerPixel(imageRef), CGImageGetBytesPerRow(imageRef), CGImageGetDataProvider(imageRef), NULL, false);
-	CGImageRef maskedImageRef	= CGImageCreateWithMask(self.CGImage, maskRef);
-	UIImage* maskedImage		= [UIImage imageWithCGImage:maskedImageRef scale:scale orientation:self.imageOrientation];
+    CGFloat scale             = self.scale;
+    CGImageRef imageRef       = image.CGImage;
+    CGSize size               = image.size;
+    CGImageRef maskRef        = CGImageMaskCreate(size.width * scale, size.height * scale, CGImageGetBitsPerComponent(imageRef), CGImageGetBitsPerPixel(imageRef), CGImageGetBytesPerRow(imageRef), CGImageGetDataProvider(imageRef), NULL, false);
+    CGImageRef maskedImageRef = CGImageCreateWithMask(self.CGImage, maskRef);
+    UIImage* maskedImage      = [UIImage imageWithCGImage:maskedImageRef scale:scale orientation:self.imageOrientation];
 	
 	CGImageRelease(maskRef);
 	CGImageRelease(maskedImageRef);
@@ -195,7 +202,7 @@
     return maskedImage;
 }
 
-- (UIImage *)imageByAddingImage:(UIImage *)image atPoint:(CGPoint)point
+- (UIImage *)og_imageByAddingImage:(UIImage *)image atPoint:(CGPoint)point
 {
 	UIGraphicsBeginImageContextWithOptions(self.size, NO, image.scale);
 	
@@ -208,7 +215,7 @@
 	return mergedImage;
 }
 
-- (UIImage *)imageCroppedAtRect:(CGRect)rect
+- (UIImage *)og_imageCroppedAtRect:(CGRect)rect
 {
 	CGFloat scale		= self.scale;
 	rect.size.width	   *= scale;
@@ -220,7 +227,7 @@
 	return image;
 }
 
-- (UIImage *)imageCenterCroppedToSize:(CGSize)size
+- (UIImage *)og_imageCenterCroppedToSize:(CGSize)size
 {
 	CGSize currentSize = self.size;
 	
@@ -230,15 +237,15 @@
 	CGFloat x = MAX((currentSize.width - size.width) / 2, 0.f);
 	CGFloat y = MAX((currentSize.height - size.height) / 2, 0.f);
 	
-	return [self imageCroppedAtRect:(CGRect){x, y, size}];
+	return [self og_imageCroppedAtRect:(CGRect){x, y, size}];
 }
 
-- (UIImage *)imageScaledToSize:(CGSize)size
+- (UIImage *)og_imageScaledToSize:(CGSize)size
 {
 	CGFloat scale				= self.scale;
-	CGAffineTransform transform	= [self transformForSize:size];
-	CGRect rect					= CGRectIntegral(self.transpose ? (CGRect){0.f, 0.f, size.height, size.width} : (CGRect){0.f, 0.f, size});
-	CGImageRef imageRef			= [self imageWithAlpha].CGImage;
+	CGAffineTransform transform	= [self og_transformForSize:size];
+	CGRect rect					= CGRectIntegral(self.og_transpose ? (CGRect){0.f, 0.f, size.height, size.width} : (CGRect){0.f, 0.f, size});
+	CGImageRef imageRef			= [self og_imageWithAlpha].CGImage;
 	CGContextRef ctx			= CGBitmapContextCreate(NULL, (size_t)(size.width * scale), (size_t)(size.height * scale), CGImageGetBitsPerComponent(imageRef), 0, CGImageGetColorSpace(imageRef), CGImageGetBitmapInfo(imageRef));
 	
 	CGContextConcatCTM				(ctx, transform);
@@ -246,8 +253,8 @@
 	CGContextSetInterpolationQuality(ctx, kCGInterpolationHigh);
 	CGContextDrawImage				(ctx, rect, imageRef);
 	
-	CGImageRef scaledImageRef	= CGBitmapContextCreateImage(ctx);
-	UIImage* scaledImage		= [UIImage imageWithCGImage:scaledImageRef scale:scale orientation:self.imageOrientation];
+    CGImageRef scaledImageRef = CGBitmapContextCreateImage(ctx);
+    UIImage* scaledImage      = [UIImage imageWithCGImage:scaledImageRef scale:scale orientation:self.imageOrientation];
 	
 	CGContextRelease(ctx);
 	CGImageRelease	(scaledImageRef);
@@ -255,12 +262,11 @@
 	return scaledImage;
 }
 
-- (UIImage *)imageAspectScaledToAtLeastSize:(CGSize)size
+- (UIImage *)og_imageAspectScaledToAtLeastSize:(CGSize)size
 {
 	CGSize currentSize = self.size;
 	
-	if (currentSize.width >= size.width && currentSize.height >= size.height)
-		return self;
+	if (currentSize.width >= size.width && currentSize.height >= size.height) return self;
 	
 	CGFloat widthScale	= currentSize.width / size.width;
 	CGFloat heightScale	= currentSize.height / size.height;
@@ -268,17 +274,18 @@
 	CGSize heightSize	= {currentSize.width / heightScale, currentSize.height / heightScale};
 	
 	if (widthSize.height < heightSize.height && widthSize.height >= size.height)
-		return [self imageScaledToSize:widthSize];
+    {
+        return [self og_imageScaledToSize:widthSize];
+    }
 	
-	return [self imageScaledToSize:heightSize];
+	return [self og_imageScaledToSize:heightSize];
 }
 
-- (UIImage *)imageAspectScaledToAtMostSize:(CGSize)size
+- (UIImage *)og_imageAspectScaledToAtMostSize:(CGSize)size
 {
 	CGSize currentSize = self.size;
 	
-	if (size.width >= currentSize.width && size.height >= currentSize.height)
-		return self;
+	if (size.width >= currentSize.width && size.height >= currentSize.height) return self;
 	
 	CGFloat widthScale	= currentSize.width / size.width;
 	CGFloat heightScale	= currentSize.height / size.height;
@@ -286,71 +293,69 @@
 	CGSize heightSize	= {currentSize.width / heightScale, currentSize.height / heightScale};
 	
 	if (widthSize.height > heightSize.height && size.height >= widthSize.height)
-		return [self imageScaledToSize:widthSize];
+    {
+        return [self og_imageScaledToSize:widthSize];
+    }
 	
-	return [self imageScaledToSize:heightSize];
+	return [self og_imageScaledToSize:heightSize];
 }
 
-- (UIImage *)imageAspectScaledToAtLeastWidth:(CGFloat)width
+- (UIImage *)og_imageAspectScaledToAtLeastWidth:(CGFloat)width
 {
 	CGSize size = self.size;
 	
-	if (size.width >= width)
-		return self;
+	if (size.width >= width) return self;
 	
-	CGFloat scale	= size.width / width;
-	CGSize newSize	= {size.width / scale, size.height / scale};
+    CGFloat scale  = size.width / width;
+    CGSize newSize = {size.width / scale, size.height / scale};
 	
-	return [self imageScaledToSize:newSize];
+	return [self og_imageScaledToSize:newSize];
 }
 
-- (UIImage *)imageAspectScaledToAtMostWidth:(CGFloat)width
+- (UIImage *)og_imageAspectScaledToAtMostWidth:(CGFloat)width
 {
 	CGSize size = self.size;
 	
-	if (width >= size.width)
-		return self;
+	if (width >= size.width) return self;
 	
-	CGFloat scale	= size.width / width;
-	CGSize newSize	= {size.width / scale, size.height / scale};
+    CGFloat scale  = size.width / width;
+    CGSize newSize = {size.width / scale, size.height / scale};
 	
-	return [self imageScaledToSize:newSize];
+	return [self og_imageScaledToSize:newSize];
 }
 
-- (UIImage *)imageAspectScaledToAtLeastHeight:(CGFloat)height
+- (UIImage *)og_imageAspectScaledToAtLeastHeight:(CGFloat)height
 {
 	CGSize size = self.size;
 	
-	if (size.height >= height)
-		return self;
+	if (size.height >= height) return self;
 	
-	CGFloat scale	= size.height / height;
-	CGSize newSize	= {size.width / scale, size.height / scale};
+    CGFloat scale  = size.height / height;
+    CGSize newSize = {size.width / scale, size.height / scale};
 	
-	return [self imageScaledToSize:newSize];
+	return [self og_imageScaledToSize:newSize];
 }
 
-- (UIImage *)imageAspectScaledToAtMostHeight:(CGFloat)height
+- (UIImage *)og_imageAspectScaledToAtMostHeight:(CGFloat)height
 {
 	CGSize size = self.size;
 	
-	if (height >= size.height)
-		return self;
+	if (height >= size.height) return self;
 	
-	CGFloat scale	= size.height / height;
-	CGSize newSize	= {size.width / scale, size.height / scale};
+    CGFloat scale  = size.height / height;
+    CGSize newSize = {size.width / scale, size.height / scale};
 	
-	return [self imageScaledToSize:newSize];
+	return [self og_imageScaledToSize:newSize];
 }
 
 #pragma mark - Helpers
 
-- (CGAffineTransform)transformForSize:(CGSize)size
+- (CGAffineTransform)og_transformForSize:(CGSize)size
 {
 	CGAffineTransform transform = CGAffineTransformIdentity;
 	
-	switch (self.imageOrientation) {
-			
+	switch (self.imageOrientation)
+    {
 		case UIImageOrientationDown:
 		case UIImageOrientationDownMirrored:
 			
@@ -376,8 +381,8 @@
 			break;
 	}
 	
-	switch (self.imageOrientation) {
-			
+	switch (self.imageOrientation)
+    {
 		case UIImageOrientationUpMirrored:
 		case UIImageOrientationDownMirrored:
 			
@@ -399,9 +404,10 @@
 	return transform;
 }
 
-- (BOOL)transpose
+- (BOOL)og_transpose
 {
-	switch (self.imageOrientation) {
+	switch (self.imageOrientation)
+    {
 		case UIImageOrientationLeft:
 		case UIImageOrientationLeftMirrored:
 		case UIImageOrientationRight:
